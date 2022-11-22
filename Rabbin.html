@@ -1,0 +1,303 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+  <title>Rabbin</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <noscript>
+    <link rel="stylesheet" href="assets/css/noscript.css" />
+  </noscript>
+
+  <script>
+    const url = "https://app-flask-d2ixdxmbca-uc.a.run.app/rabin/";
+  
+    file1 = '';
+    file2 = '';
+    prefix = 'data:text/plain;base64,';
+  
+    const loadFile = function(event, oneortwo) {
+      if (oneortwo){
+        id = 'DocInput';
+      } else {
+        id = 'DocInput2';
+      }
+      var output = document.getElementById(id);
+      output.src = URL.createObjectURL(event.target.files[0]);
+      //let link = document.createElement('a');
+      //link.download = 'hello.txt';
+  
+      // let blob = new Blob(['Hello, world!'], {type: 'text/plain'});
+  
+      let reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]); // converts the blob to base64 and calls onload
+  
+      reader.onload = function() {
+      //link.href = reader.result; // data url
+          if(oneortwo){
+            file1 = reader.result;
+          } else {
+            file2 = reader.result;
+          }
+          //prefix = currentimg.split(",")[0] + ","
+          // console.log(currentimg)
+          // console.log(prefix)
+      //link.click();
+      };
+  
+      output.onload = function() {
+        URL.revokeObjectURL(output.src) // free memory
+      }
+  
+    };
+  
+  const handleCypher = (mode) => {
+      if(mode == "encrypt"){
+          let text = document.getElementById("inputTextEncrypt").value;
+          const sendInfo = {"plaintext": text};
+          fetch(url + 'enc', {
+              method: 'POST', // or 'PUT'
+              body: JSON.stringify(sendInfo), // data can be `string` or {object}!
+              headers:{
+                  'Content-Type': 'application/json'
+              }})
+              .then(function(response) {
+                  return response.json();
+              })
+              .then(function(jsonResponse) {
+                  // do something with jsonResponse
+  
+                  let link = document.createElement('a');
+                  link.download = "ciphertext.txt";
+                  link.target = '_blank';
+                  link.href = prefix + jsonResponse.ciphertext;
+                  link.click() // Downloads the picture
+                  
+                  let link2 = document.createElement('a');
+                  link2.download = "key.txt";
+                  link2.target = '_blank';
+                  link2.href = prefix + jsonResponse.key;
+                  link2.click() // Downloads the picture
+  
+              });
+  
+      } else if (mode == "decrypt") {
+          
+          const sendInfo = {"ciphertext": file1.slice(prefix.length), "key": file2.slice(prefix.length)};
+          fetch(url + 'dec', {
+              method: 'POST', // or 'PUT'
+              body: JSON.stringify(sendInfo), // data can be `string` or {object}!
+              headers:{
+                  'Content-Type': 'application/json'
+              }})
+              .then(function(response) {
+                  return response.json();
+              })
+              .then(function(jsonResponse) {
+                  // do something with jsonResponse
+                  document.getElementById('decryptionResultsDiv').style = 'display:contents';
+                  document.getElementById('cardDecryptionText').innerText = jsonResponse.plaintext
+                  
+              });
+      }
+  }
+  </script>
+</head>
+
+<body class="is-preload">
+  <div id="page-wrapper">
+
+<!-- Header -->
+<header id="header">
+  <h1 id="logo"><a href="index.html">CriptoMonkas!</a></h1>
+  <nav id="nav">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li>
+        <a href="#">Crpyto Sistems</a>
+        <ul>
+          <li>
+            <a href="#"> Classic</a>
+            <ul>
+              <li><a href="sisShift.html">Shift</a></li>
+              <li><a href="sisAfin.html">Affine</a></li>
+              <li><a href="sisPermutacion.html">Permutation</a></li>
+              <li><a href="sisSustitucion.html">Sustitution</a></li>
+              <li><a href="sisHill.html">Hill</a></li>
+              <li><a href="sisVigenere.html">Vigenere</a></li>
+              <li>
+            </ul>
+          <li> <li>
+            <a href="#"> Block</a>
+            <ul>
+              <li><a href="AES.html">AES</a></li>
+              <li><a href="T-DES.html">T-DES</a></li>
+              <li><a href="S-DES.html">S-DES</a></li>
+              <li><a href="GammaPenta.html">Gamma-Pentagonal</a></li>
+              <li>
+            </ul>
+          <li> </a>
+            <a href="#"> Public key</a>
+            <ul>
+              <li><a href="RSA.html">RSA</a></li>
+              <li><a href="ElGamal.html">Elgammal</a></li>
+              <li><a href="Rabbin.html">Rabbin</a></li>
+              <li><a href="Menezes.html">Menezes</a></li>
+              <li>
+            </ul>
+          <li> </a>
+            <a href="#">Analysis</a>
+            <ul>
+              <li><a href="AnShift.html">Shift analysis</a></li>
+              <li><a href="AnAfin.html">Affine analysis</a></li>
+              <li><a href="AnPermutacion.html">Permutation analysis</a></li>
+              <li><a href="AnSustitucion.html">Sustitution analysis</a></li>
+              <li><a href="AnHill.html">Hill analysis</a></li>
+              <li><a href="AnVigenere.html">Vigenere analysis</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="aboutUs.html">About us</a></li>
+    </ul>
+  </nav>
+</header>
+
+    <!-- Content -->
+
+    <div class="container">
+      <center>
+        <h3>Rabbin Cypher</h3>
+      </center>
+      <br>
+
+
+
+      <div class="row">
+        <div class="col-6 col-12-xsmall">
+          <h3>Encrypt</h3>
+          <div class="mb-3">
+            <label for="inputTextEncrypt" class="form-label">Text</label>
+            <input type="text" class="form-control" id="inputTextEncrypt" aria-describedby="textHelp"
+              style="text-transform:uppercase">
+            <div id="textHelp" class="form-text">Please introduce some text to encrypt.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="inputKeyEncrypt" class="form-label">Key</label>
+            <input type="text" class="form-control" disabled>
+            <div id="keyHelp" class="form-text">key used to encrypt.</div>
+          </div>
+
+          <div class="mb-3">
+            <label for="inputNumberEncrypt" class="form-label" >Number</label>
+            <input type="text" disabled>
+            <div id="keyHelp" class="form-text">Number used to encrypt.</div>
+          </div>
+
+          <div class="text-center">
+
+            <button id="submitButtoncrypt" type="button" class="button primary" onclick="handleCypher('encrypt')">Encrypt
+            </button>
+          </div>
+          </form>
+        </div>
+
+        <div id="encryptionResultsDiv" class="row mt-5" style="display: none;">
+          <hr>
+          <h4 class="card-subtitle mt-2 mb-4 text-center">Results</h4>
+          <p><b>Encryption: </b><span id="cardEncryptionText"></span></p>
+          <p><b>Key Used: </b><span id="cardEncryptionKey"></span></p>
+        </div>
+        <div class="col-6 col-12-xsmall">
+
+
+
+
+
+          <h3>Decrypt</h3>
+
+          <br>
+          <br>
+
+          <label for="DocInput" class="button primary icon solid fa-download">Select Document</label>
+          <input id="DocInput" style="visibility:hidden;" type="file" accept=".txt" onchange="loadFile(event, true)">
+
+          <br>
+          <br>
+          <br>
+
+          <label for="DocInput2" class="button primary icon solid fa-download">Select Document</label>
+          <input id="DocInput2" style="visibility:hidden;" type="file" accept=".txt" onchange="loadFile(event, false)">
+
+          <div class="text-center">
+            <br>
+            <br>
+
+            <button id="submitButtonDecrypt" type="button primary" class="button primary" onclick="handleCypher('decrypt')">Decrypt
+                            </button>
+                   
+                <div id="decryptionResultsDiv" class="row mt-5" style="display: none;">
+              <hr>
+              <h4 class="card-subtitle mt-2 mb-4 text-center">Results</h4>
+              <p><b>Decryption: </b><span id="cardDecryptionText"></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="card">
+        <div class="card-body">
+          <center>
+            <h5>Explanation</h5>
+          </center>
+
+          <h6 class="card-subtitle mb-2 text-muted">How does this work?</h6>
+          
+
+          <p class="card-text">
+            <p>Rabin’s public-key encryption is an asymmetric encryption scheme based on the modular square root problem, an thus related to integer factoring.</p>
+            <p>The Rabin cryptosystem is a computationally secure asymmetric cipher against a chosen plaintext attack provided that modulo <span class="math inline"><em>n</em> = <em>p</em><em>q</em></span> cannot be factored. Therefore, the Rabin cryptosystem is an example of a provably secure cryptosystem assuming the computationally infeasible factorization problem, the Rabin cryptosystem is secure. A drawback of the Rabin cryptosystem is that the encryption function <span class="math inline"><em>e</em><sub><em>K</em></sub></span> is not an injection, so decryption cannot be performed unambiguously. We define the cryptosystem more formally as follows:</p>
+            <p>Let <span class="math inline"><em>n</em> = <em>p</em><em>q</em></span> where <span class="math inline"><em>p</em></span>, and <span class="math inline"><em>q</em></span> are prime and <span class="math inline"><em>p</em>, <em>q</em> ≡ 3 mod  4</span>, then <span class="math inline">𝒫 = 𝒞 = ℤ<sub><em>n</em></sub><sup>*</sup></span>, <span class="math inline">𝒦 = {(<em>n</em>,<em>p</em>,<em>q</em>,<em>B</em>)|0 ≤ <em>B</em> ≤ <em>n</em> − 1}</span>. For <span class="math inline"><em>K</em> = (<em>n</em>,<em>p</em>,<em>q</em>,<em>B</em>)</span>
+            <div class="text-center">
+                <img src="images/Rabin1.png" class="img-fluid" class="rounded" alt="Vale">
+            </div>
+            where <span class="math inline"><em>n</em></span> and <span class="math inline"><em>B</em></span> are the public key and <span class="math inline"><em>p</em></span> and <span class="math inline"><em>q</em></span> are the private key.<br />
+            <br>
+            <strong>Example:</strong> Suppose we are going to encrypt the already encrypted text 8491506 with <span class="math inline"><em>n</em> = 25202371 = 4139</span> and <span class="math inline"><em>B</em> = 2161</span>, the resulting ciphertext is: </p>
+            <div class="text-center">
+                <img src="images/Rabin2.png"  class="img-fluid" class="rounded" alt="Vale">
+            </div>
+            And to decipher the encoded text we do:
+            <div class="text-center">
+                <img src="images/Rabin3.png"  class="img-fluid" class="rounded" alt="Vale">
+            </div>
+            where <span class="math inline"><em>d</em><sub><em>K</em><sub>4</sub></sub></span> matches the text we encrypted in the first part of the example.</p>
+            
+
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-5"></div>
+
+  <!-- Scripts -->
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery.scrolly.min.js"></script>
+  <script src="assets/js/jquery.dropotron.min.js"></script>
+  <script src="assets/js/jquery.scrollex.min.js"></script>
+  <script src="assets/js/browser.min.js"></script>
+  <script src="assets/js/breakpoints.min.js"></script>
+  <script src="assets/js/util.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script algorithm="hill" src="scripts/script.js"></script>
+  <script algorithm="hill" src="scripts/imageProcessingScript.js"></script>
+
+</body>
+
+</html>

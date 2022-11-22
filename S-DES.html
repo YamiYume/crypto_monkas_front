@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>S-DES</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <script>
+  const random = (min, max) => {return Math.floor(Math.random() * (max - min) + min)};
+  const url = "https://app-flask-d2ixdxmbca-uc.a.run.app/sdes/";
+
+        // const sendInfo = {"plaintext": "ECDBAF", "key": "2 1"}; // "ECDBAF", "5 3 4 2 1"
+        /*const encrypt = (text, key) => {
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            var cypher = '';
+            xhr.onreadystatechange = function () {
+            if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                console.log(xhr.responseText);
+                cypher = xhr.responseText["ciphertext"];
+            }
+            };
+            const sendInfo = {"plaintext": text, "key": key};
+            
+            xhr.send(JSON.stringify(sendInfo));
+            console.log(cypher)
+            return cypher;
+            
+        }*/
+
+        const generateKey = ()=>{
+            key = '';
+            for (let i = 0; i < 10; i++) {
+              key += random(0, 2).toString();
+            }
+            return key
+        }
+
+        const handleCypher = (mode) => {
+            if(mode == "encrypt"){
+                let text = document.getElementById("textEncrypt").value;
+                let key = document.getElementById("keyEncrypt").value;
+                if(!key){
+                    key = generateKey();
+                    document.getElementById("keyEncrypt").value = key
+                }
+                const sendInfo = {"text": text, "key": key};
+                fetch(url + 'enc', {
+                    method: 'POST', // or 'PUT'
+                    body: JSON.stringify(sendInfo), // data can be `string` or {object}!
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }})
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(jsonResponse) {
+                        // do something with jsonResponse
+                        console.log(jsonResponse.output)
+                        document.getElementById("outputEncrypt").value = jsonResponse.output;
+                    });
+
+            } else if (mode == "decrypt") {
+                let text = document.getElementById("textDecrypt").value;
+                let key = document.getElementById("keyDecrypt").value;
+                if(!key){
+                    key = generateKey();
+                    document.getElementById("keyDecrypt").value = "Example: " + key
+                }
+                const sendInfo = {"text": text, "key": key};
+                fetch(url  + 'dec', {
+                    method: 'POST', // or 'PUT'
+                    body: JSON.stringify(sendInfo), // data can be `string` or {object}!
+                    headers:{
+                        'Content-Type': 'application/json'
+                    }})
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(jsonResponse) {
+                        // do something with jsonResponse
+                        console.log(jsonResponse.output)
+                        document.getElementById("outputDecrypt").value = jsonResponse.output;
+                    });
+            }
+        }
+      </script>
+	</head>
+
+	<body class="is-preload">
+		<div id="page-wrapper">
+
+			 <!-- Header -->
+             <header id="header">
+                <h1 id="logo"><a href="index.html">CriptoMonkas!</a></h1>
+                <nav id="nav">
+                  <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li>
+                      <a href="#">Crpyto Sistems</a>
+                      <ul>
+                        <li>
+                          <a href="#"> Classic</a>
+                          <ul>
+                            <li><a href="sisShift.html">Shift</a></li>
+                            <li><a href="sisAfin.html">Affine</a></li>
+                            <li><a href="sisPermutacion.html">Permutation</a></li>
+                            <li><a href="sisSustitucion.html">Sustitution</a></li>
+                            <li><a href="sisHill.html">Hill</a></li>
+                            <li><a href="sisVigenere.html">Vigenere</a></li>
+                            <li>
+                          </ul>
+                        <li> <li>
+                          <a href="#"> Block</a>
+                          <ul>
+                            <li><a href="AES.html">AES</a></li>
+                            <li><a href="T-DES.html">T-DES</a></li>
+                            <li><a href="S-DES.html">S-DES</a></li>
+                            <li><a href="GammaPenta.html">Gamma-Pentagonal</a></li>
+                            <li>
+                          </ul>
+                        <li> </a>
+                          <a href="#"> Public key</a>
+                          <ul>
+                            <li><a href="RSA.html">RSA</a></li>
+                            <li><a href="ElGamal.html">Elgammal</a></li>
+                            <li><a href="Rabbin.html">Rabbin</a></li>
+                            <li><a href="Menezes.html">Menezes</a></li>
+                            <li>
+                          </ul>
+                        <li> </a>
+                          <a href="#">Analysis</a>
+                          <ul>
+                            <li><a href="AnShift.html">Shift analysis</a></li>
+                            <li><a href="AnAfin.html">Affine analysis</a></li>
+                            <li><a href="AnPermutacion.html">Permutation analysis</a></li>
+                            <li><a href="AnSustitucion.html">Sustitution analysis</a></li>
+                            <li><a href="AnHill.html">Hill analysis</a></li>
+                            <li><a href="AnVigenere.html">Vigenere analysis</a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </li>
+                    <li><a href="aboutUs.html">About us</a></li>
+                  </ul>
+                </nav>
+              </header>
+
+						<!-- Content -->
+						
+<div class="container">
+    <center>
+        <h3>S-DES text cypher</h3>
+    </center>  
+    <br>
+    
+
+
+    <div class="row">
+        <div class="col-6 col-12-xsmall">
+                            <h3>Encrypt</h3>
+                            <div class="mb-3">
+                            <label for="textEncrypt" class="form-label">Text</label>
+                            <input type="text" class="form-control" id="textEncrypt"
+                                   aria-describedby="textHelp">
+                            <div id="textHelp" class="form-text">Please introduce some text to encrypt.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="keyEncrypt" class="form-label">Key</label>
+                            <input type="text" class="form-control" id="keyEncrypt" aria-describedby="keyHelp"
+                                   style="text-transform:uppercase" placeholder="Example: 1011101010 (10 bits)">
+                            <div id="keyHelp" class="form-text">Please introduce the key to encrypt.</div>
+                            </div>
+                        <div class="text-center">
+                            <button id="submitButtoncrypt" type="button"
+                                    class="button primary" onclick="handleCypher('encrypt')">Encrypt
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <textarea id="outputEncrypt"></textarea>
+
+               <div class="col-6 col-12-xsmall">
+                <h3>Decrypt</h3>
+                            <label for="textDecrypt" class="form-label">Text</label>
+                            <input type="text" class="form-control" id="textDecrypt"
+                                   aria-describedby="textHelp">
+                            <div id="textHelp" class="form-text">Please introduce the text to decrypt.</div>
+                             <div class="mb-3">
+                            <label for="keyDecrypt" class="form-label">Key</label>
+                            <input type="text" class="form-control" id="keyDecrypt" aria-describedby="keyHelp"
+                                   style="text-transform:uppercase">
+                            <div id="keyHelp" class="form-text">Please introduce the key.</div>
+                        </div>
+                        <div class="text-center">
+
+                            <button id="submitButtonDecrypt" type="button primary"
+                                    class="button primary" onclick="handleCypher('decrypt')">Decrypt
+                            </button>
+                            <textarea id="outputDecrypt"></textarea>
+            </div>
+        </div>
+        <br>        
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <center>
+                        <h5>Explanation</h5>
+                    </center>
+
+                    <h6 class="card-subtitle mb-2 text-muted">How does this work?</h6>
+
+                    <p class="card-text">
+
+                    <p>S-DES is a block cipher like and 3-DES. It uses a 8-bit block size and 10-bit secret key.
+                        This means that if we have a large message, it should be split into blocks of bits the same way as in encryption
+                        This can be very handy, especially if you are working with characters encoded in ASCII2 code in which each is encoded with 8 bits, that way we character by character and encrypt it at the key help.
+                        S-DES as its name suggests is a form of the DES algorithm, what it does is use the process of DES encryption but using other permutation tables IP, E, IP−1 and others are used as P4
+                        
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="mt-5"></div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+            <!--<script algorithm="hill" src="scripts/script.js"></script>
+            <script algorithm="hill" src="scripts/imageProcessingScript.js"></script>-->
+
+	</body>
+</html>
